@@ -27,6 +27,4 @@ public class StudentDetailController {
         ArrayList<StudentDetail> result = this.studentDetailServiceImpl.getAllStudentDetail();
         return ResponseEntity.ok(ApiResponse.Ok(result));
     }
-
-
 }
