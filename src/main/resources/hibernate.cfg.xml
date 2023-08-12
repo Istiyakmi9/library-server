@@ -7,19 +7,22 @@
     <session-factory>
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
 
-        <!--         Local database server detail -->
-        <property name="connection.url">jdbc:mysql://localhost:3306/library_server</property>
-        <property name="connection.username">root</property>
-        <property name="connection.password">Sarfaraz@35</property>
+        <!--         Local Instance -->
+<!--        <property name="connection.url">jdbc:mysql://localhost:3306/library_server</property>-->
+<!--        <property name="connection.username">root</property>-->
+<!--        <property name="connection.password">Sarfaraz@35</property>-->
+
+        <!--         Local-server(Remote) -->
+        <property name="connection.url">jdbc:mysql://192.168.0.101:3306/library_server</property>
+        <property name="connection.username">istiyak</property>
+        <property name="connection.password">live@Bottomhalf_001</property>
+
         <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
         <property name="show_sql">true</property>
         <property name="hibernate.proc.param_null_passing">true</property>
 
-        <!--        <mapping class="com.bottrack.model.User" />-->
-
-
-<!--        <mapping class="com.librarymanagement.entity.Login"/>-->
-<!--        <mapping class="com.librarymanagement.entity.BookDetails"/>-->
+        <mapping class="com.libraryserver.entity.Login"/>
+        <mapping class="com.libraryserver.entity.StudentDetail"/>
 
 
     </session-factory>

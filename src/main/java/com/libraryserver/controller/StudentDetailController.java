@@ -6,7 +6,6 @@ import com.libraryserver.serviceImpl.StudentDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 
 @RestController
@@ -17,7 +16,7 @@ public class StudentDetailController {
     StudentDetailServiceImpl studentDetailServiceImpl;
 
     @PostMapping("/addStudentDetail")
-    public ResponseEntity<ApiResponse> addStudentDetail( @RequestBody StudentDetail studentDetail ){
+    public ResponseEntity<ApiResponse> addStudentDetail(@RequestBody StudentDetail studentDetail) throws Exception {
         var result = this.studentDetailServiceImpl.addStudentDetailService(studentDetail);
         return ResponseEntity.ok(ApiResponse.Ok(result));
     }
