@@ -13,9 +13,9 @@
 <!--        <property name="connection.password">Sarfaraz@35</property>-->
 
         <!--         Local-server(Remote) -->
-        <property name="connection.url">jdbc:mysql://192.168.0.101:3306/library_server</property>
+        <property name="connection.url">jdbc:mysql://194.233.76.48:3306/library_server</property>
         <property name="connection.username">istiyak</property>
-        <property name="connection.password">live@Bottomhalf_001</property>
+        <property name="connection.password">live@Bottomhalf_011</property>
 
         <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
         <property name="show_sql">true</property>
