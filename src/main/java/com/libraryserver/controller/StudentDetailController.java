@@ -21,6 +21,12 @@ public class StudentDetailController {
         return ResponseEntity.ok(ApiResponse.Ok(result));
     }
 
+    @PutMapping("/updateStudentDetail/{userId}")
+    public ResponseEntity<ApiResponse> updateStudentDetail(@RequestBody StudentDetail studentDetail, @PathVariable("userId") long userId ) throws Exception {
+        var result = this.studentDetailServiceImpl.updateStudentDetailService(studentDetail, userId);
+        return ResponseEntity.ok(ApiResponse.Ok(result));
+    }
+
     @GetMapping("/getAllStudentDetail")
     public ResponseEntity<ApiResponse> getAllStudentDetail(){
         ArrayList<StudentDetail> result = this.studentDetailServiceImpl.getAllStudentDetail();

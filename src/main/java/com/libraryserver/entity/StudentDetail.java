@@ -30,9 +30,11 @@ public class StudentDetail {
     BigDecimal amount;
 
     @Column(name = "DateOfJoining")
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
     Date dateOfJoining;
 
     @Column(name = "DateOfFeesPayment")
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
     Date dateOfFeesPayment;
 
     @Column(name = "LockerFesility")
@@ -48,6 +50,7 @@ public class StudentDetail {
     Boolean refIdCardIssued;
 
     @Column(name = "RefIdCardIssueDate")
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")
     Date refIdCardIssueDate;
 
     @Column(name = "CardDeposit")
