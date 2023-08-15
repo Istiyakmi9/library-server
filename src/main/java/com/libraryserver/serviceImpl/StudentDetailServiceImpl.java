@@ -21,7 +21,6 @@ public class StudentDetailServiceImpl implements StudentDetailService {
 
 
     public String addStudentDetailService(StudentDetail studentDetail) throws Exception {
-
         Date utilDate = new Date();
         var date = new Timestamp(utilDate.getTime());
         Optional<StudentDetail> lastUserId = Optional.ofNullable(this.studentDetailRepository.getLastUserId());
