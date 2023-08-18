@@ -9,6 +9,6 @@ import java.util.ArrayList;
 
 public interface StudentDetailService {
 
-    public String addStudentDetailService(StudentDetail studentDetail) throws Exception;
+    public String addStudentDetailService(StudentDetail studentDetail, MultipartFile file) throws Exception;
     public ArrayList<StudentDetail> getAllStudentDetail();
 }

@@ -59,8 +59,8 @@ public class StudentDetail {
     @Column(name = "Remarks")
     String remarks;
 
-    @Column(name = "ImageProfile")
-    String imageProfile;
+    @Column(name = "FileId")
+    long fileId;
 
     @Column(name = "CreatedBy")
     Long createdBy;
@@ -71,36 +71,9 @@ public class StudentDetail {
     @Column(name = "CreatedOn")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     Date createdOn;
-
     @Column(name = "UpdatedOn")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     Date updatedOn;
-
-    public StudentDetail(Long userId, String studentName, String mobile, String email, int seatNo, BigDecimal amount, Date dateOfJoining, Date dateOfFeesPayment, Boolean lockerFesility, int lockerNo, BigDecimal lockerFees, Boolean refIdCardIssued, Date refIdCardIssueDate, Boolean cardDeposit, String remarks, String imageProfile, Long createdBy, Long updatedBy, Date createdOn, Date updatedOn) {
-        this.userId = userId;
-        this.studentName = studentName;
-        this.mobile = mobile;
-        this.email = email;
-        this.seatNo = seatNo;
-        this.amount = amount;
-        this.dateOfJoining = dateOfJoining;
-        this.dateOfFeesPayment = dateOfFeesPayment;
-        this.lockerFesility = lockerFesility;
-        this.lockerNo = lockerNo;
-        this.lockerFees = lockerFees;
-        this.refIdCardIssued = refIdCardIssued;
-        this.refIdCardIssueDate = refIdCardIssueDate;
-        this.cardDeposit = cardDeposit;
-        this.remarks = remarks;
-        this.imageProfile = imageProfile;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.createdOn = createdOn;
-        this.updatedOn = updatedOn;
-    }
-
-    public StudentDetail() {
-    }
 
     public Long getUserId() {
         return userId;
@@ -222,12 +195,12 @@ public class StudentDetail {
         this.remarks = remarks;
     }
 
-    public String getImageProfile() {
-        return imageProfile;
+    public long getFileId() {
+        return fileId;
     }
 
-    public void setImageProfile(String imageProfile) {
-        this.imageProfile = imageProfile;
+    public void setFileId(long fileId) {
+        this.fileId = fileId;
     }
 
     public Long getCreatedBy() {
@@ -262,6 +235,34 @@ public class StudentDetail {
         this.updatedOn = updatedOn;
     }
 
+    public StudentDetail(Long userId, String studentName, String mobile, String email, int seatNo, BigDecimal amount, Date dateOfJoining, Date dateOfFeesPayment, Boolean lockerFesility, int lockerNo, BigDecimal lockerFees, Boolean refIdCardIssued, Date refIdCardIssueDate, Boolean cardDeposit, String remarks, long fileId, Long createdBy, Long updatedBy, Date createdOn, Date updatedOn) {
+
+
+        this.userId = userId;
+        this.studentName = studentName;
+        this.mobile = mobile;
+        this.email = email;
+        this.seatNo = seatNo;
+        this.amount = amount;
+        this.dateOfJoining = dateOfJoining;
+        this.dateOfFeesPayment = dateOfFeesPayment;
+        this.lockerFesility = lockerFesility;
+        this.lockerNo = lockerNo;
+        this.lockerFees = lockerFees;
+        this.refIdCardIssued = refIdCardIssued;
+        this.refIdCardIssueDate = refIdCardIssueDate;
+        this.cardDeposit = cardDeposit;
+        this.remarks = remarks;
+        this.fileId = fileId;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.createdOn = createdOn;
+        this.updatedOn = updatedOn;
+    }
+
+    public StudentDetail() {
+    }
+
     @Override
     public String toString() {
         return "StudentDetail{" +
@@ -280,7 +281,7 @@ public class StudentDetail {
                 ", refIdCardIssueDate=" + refIdCardIssueDate +
                 ", cardDeposit=" + cardDeposit +
                 ", remarks='" + remarks + '\'' +
-                ", imageProfile='" + imageProfile + '\'' +
+                ", fileId=" + fileId +
                 ", createdBy=" + createdBy +
                 ", updatedBy=" + updatedBy +
                 ", createdOn=" + createdOn +

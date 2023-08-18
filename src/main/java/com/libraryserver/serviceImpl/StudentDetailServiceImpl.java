@@ -1,11 +1,20 @@
 package com.libraryserver.serviceImpl;
 
+import com.libraryserver.entity.FileDetail;
 import com.libraryserver.entity.StudentDetail;
+import com.libraryserver.model.FileStorageProperties;
+import com.libraryserver.repository.FileDetailRepository;
 import com.libraryserver.repository.StudentDetailRepository;
 import com.libraryserver.service.StudentDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,9 +27,13 @@ public class StudentDetailServiceImpl implements StudentDetailService {
     @Autowired
     StudentDetailRepository studentDetailRepository;
 
+    @Autowired
+    FileDetailRepository fileDetailRepository;
+    @Autowired
+    FileStorageProperties fileStorageProperties;
 
-
-    public String addStudentDetailService(StudentDetail studentDetail) throws Exception {
+    @Transactional(rollbackFor = Exception.class)
+    public String addStudentDetailService(StudentDetail studentDetail, MultipartFile file) throws Exception {
         Date utilDate = new Date();
         var date = new Timestamp(utilDate.getTime());
         Optional<StudentDetail> lastUserId = Optional.ofNullable(this.studentDetailRepository.getLastUserId());
@@ -28,9 +41,74 @@ public class StudentDetailServiceImpl implements StudentDetailService {
             studentDetail.setUserId(1L);
         else
             studentDetail.setUserId(lastUserId.get().getUserId()+1);
+
         studentDetail.setCreatedOn(date);
+        uploadStudentImage(studentDetail, file);
         this.studentDetailRepository.save(studentDetail);
         return " New Student detail has been added";
+    }
+    private void  uploadStudentImage(StudentDetail studentDetail, MultipartFile file) throws Exception {
+        if (!file.isEmpty()){
+            String oldFilePath = "";
+            FileDetail fileDetail = uploadFile(file, studentDetail.getUserId(), "student_" + studentDetail.getUserId(), oldFilePath);
+            if (fileDetail != null){
+                FileDetail lastFileDetail = fileDetailRepository.getLastFileDetail();
+                if (lastFileDetail == null)
+                    fileDetail.setFileId(1L);
+                else
+                    fileDetail.setFileId(lastFileDetail.getFileId() + 1);
+
+                studentDetail.setFileId(fileDetail.getFileId());
+                fileDetail.setFileOwnerId(studentDetail.getUserId());
+                fileDetail.setCreatedBy(studentDetail.getUserId());
+                fileDetail.setCreatedOn(studentDetail.getCreatedOn());
+                fileDetailRepository.save(fileDetail);
+            }
+        }
+    }
+
+    private FileDetail uploadFile(MultipartFile file, long userId, String fileName, String existingFilePath) throws Exception {
+        FileDetail fileDetail = null;
+        String name = file.getOriginalFilename();
+        if (file != null && name != null && !name.isEmpty()){
+            fileDetail = new FileDetail();
+            String ext = name.substring(name.lastIndexOf(".") + 1);
+            String nameOnly = name.substring(0, name.lastIndexOf("."));
+            String relativePath = Paths.get("student_" + String.valueOf(userId)).toString();
+
+            if(name.contains(".."))
+                throw new Exception("File name contain invalid character.");
+
+            var basePath = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath().normalize().toString();
+            Path targetDirectory = Paths.get(basePath, relativePath)
+                    .toAbsolutePath()
+                    .normalize();
+            if(Files.notExists(targetDirectory))
+                Files.createDirectories(targetDirectory);
+
+            String newFileName = null;
+            if (fileName.isEmpty()) {
+                fileDetail.setFileName(nameOnly);
+                newFileName = nameOnly;
+            } else {
+                fileDetail.setFileName(fileName);
+                newFileName = fileName + "." + ext;
+            }
+
+            Path targetPath = targetDirectory.resolve(newFileName);
+
+            if (!existingFilePath.isEmpty()) {
+                var existingFile = targetDirectory.resolve(existingFilePath);
+                if(Files.exists(existingFile))
+                    Files.delete(existingFile);
+            }
+
+            Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+
+            fileDetail.setFilePath(relativePath);
+            fileDetail.setFileExtension(ext);
+        }
+        return fileDetail;
     }
 
     public ArrayList<StudentDetail> getAllStudentDetail() {
@@ -59,7 +137,6 @@ public class StudentDetailServiceImpl implements StudentDetailService {
         existingstudentDetail.setRefIdCardIssueDate(studentDetail.getRefIdCardIssueDate());
         existingstudentDetail.setCardDeposit(studentDetail.getCardDeposit());
         existingstudentDetail.setRemarks(studentDetail.getRemarks());
-        existingstudentDetail.setImageProfile(studentDetail.getImageProfile());
         existingstudentDetail.setUpdatedBy(userId);
         existingstudentDetail.setUpdatedOn(date);
 
