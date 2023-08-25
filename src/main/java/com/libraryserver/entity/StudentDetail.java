@@ -75,6 +75,17 @@ public class StudentDetail {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     Date updatedOn;
 
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    @Transient
+    String filePath;
+
     public Long getUserId() {
         return userId;
     }

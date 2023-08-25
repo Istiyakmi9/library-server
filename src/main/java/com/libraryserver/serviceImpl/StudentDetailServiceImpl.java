@@ -43,6 +43,7 @@ public class StudentDetailServiceImpl implements StudentDetailService {
             studentDetail.setUserId(lastUserId.get().getUserId()+1);
 
         studentDetail.setCreatedOn(date);
+        studentDetail.setFileId(0L);
         uploadStudentImage(studentDetail, file);
         this.studentDetailRepository.save(studentDetail);
         return " New Student detail has been added";
@@ -74,7 +75,7 @@ public class StudentDetailServiceImpl implements StudentDetailService {
             fileDetail = new FileDetail();
             String ext = name.substring(name.lastIndexOf(".") + 1);
             String nameOnly = name.substring(0, name.lastIndexOf("."));
-            String relativePath = Paths.get("student_" + String.valueOf(userId)).toString();
+            String relativePath = "student";
 
             if(name.contains(".."))
                 throw new Exception("File name contain invalid character.");
@@ -113,6 +114,14 @@ public class StudentDetailServiceImpl implements StudentDetailService {
 
     public ArrayList<StudentDetail> getAllStudentDetail() {
         List<StudentDetail> result = this.studentDetailRepository.findAll();
+        List<FileDetail> fileDetails = fileDetailRepository.findAll();
+        result.forEach(x -> {
+            var file = fileDetails.stream().filter(i -> i.getFileId() == x.getFileId()).findFirst();
+            if (file.isPresent()) {
+                var fileDetail = file.get();
+                x.setFilePath(Paths.get(fileDetail.getFilePath(), fileDetail.getFileName() + "." + fileDetail.getFileExtension()).toString());
+            }
+        });
         return (ArrayList<StudentDetail>) result;
     }
 
