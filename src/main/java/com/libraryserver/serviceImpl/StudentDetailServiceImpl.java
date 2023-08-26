@@ -142,7 +142,6 @@ public class StudentDetailServiceImpl implements StudentDetailService {
 
     @Transactional(rollbackFor = Exception.class)
     public StudentDetail updateStudentDetailService(StudentDetail studentDetail, MultipartFile file, long userId) throws Exception {
-
         java.util.Date utilDate = new Date();
         var date = new Timestamp(utilDate.getTime());
         Optional<StudentDetail> result = this.studentDetailRepository.findById(userId);
