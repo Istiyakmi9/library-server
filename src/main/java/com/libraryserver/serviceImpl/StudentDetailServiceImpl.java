@@ -51,19 +51,34 @@ public class StudentDetailServiceImpl implements StudentDetailService {
     private void  uploadStudentImage(StudentDetail studentDetail, MultipartFile file) throws Exception {
         if (!file.isEmpty()){
             String oldFilePath = "";
+            FileDetail existFileDetail = null;
+            if (studentDetail.getFileId() > 0) {
+                existFileDetail = fileDetailRepository.getById(studentDetail.getFileId());
+                if(existFileDetail != null )
+                    oldFilePath = existFileDetail.getFileName()+"."+existFileDetail.getFileExtension();
+            }
+
             FileDetail fileDetail = uploadFile(file, studentDetail.getUserId(), "student_" + studentDetail.getUserId(), oldFilePath);
             if (fileDetail != null){
-                FileDetail lastFileDetail = fileDetailRepository.getLastFileDetail();
-                if (lastFileDetail == null)
-                    fileDetail.setFileId(1L);
-                else
-                    fileDetail.setFileId(lastFileDetail.getFileId() + 1);
+                if (existFileDetail == null){
+                    FileDetail lastFileDetail = fileDetailRepository.getLastFileDetail();
+                    if (lastFileDetail == null)
+                        fileDetail.setFileId(1L);
+                    else
+                        fileDetail.setFileId(lastFileDetail.getFileId() + 1);
 
-                studentDetail.setFileId(fileDetail.getFileId());
-                fileDetail.setFileOwnerId(studentDetail.getUserId());
-                fileDetail.setCreatedBy(studentDetail.getUserId());
-                fileDetail.setCreatedOn(studentDetail.getCreatedOn());
-                fileDetailRepository.save(fileDetail);
+                    studentDetail.setFileId(fileDetail.getFileId());
+                    fileDetail.setFileOwnerId(studentDetail.getUserId());
+                    existFileDetail = fileDetail;
+                }else {
+                    existFileDetail.setFileName(fileDetail.getFileName());
+                    existFileDetail.setFilePath(fileDetail.getFilePath());
+                    existFileDetail.setFileExtension(fileDetail.getFileExtension());
+                }
+
+                existFileDetail.setCreatedBy(studentDetail.getUserId());
+                existFileDetail.setCreatedOn(studentDetail.getCreatedOn());
+                fileDetailRepository.save(existFileDetail);
             }
         }
     }
@@ -125,7 +140,9 @@ public class StudentDetailServiceImpl implements StudentDetailService {
         return (ArrayList<StudentDetail>) result;
     }
 
-    public StudentDetail updateStudentDetailService(StudentDetail studentDetail, long userId) throws Exception {
+    @Transactional(rollbackFor = Exception.class)
+    public StudentDetail updateStudentDetailService(StudentDetail studentDetail, MultipartFile file, long userId) throws Exception {
+
         java.util.Date utilDate = new Date();
         var date = new Timestamp(utilDate.getTime());
         Optional<StudentDetail> result = this.studentDetailRepository.findById(userId);
@@ -149,6 +166,7 @@ public class StudentDetailServiceImpl implements StudentDetailService {
         existingstudentDetail.setUpdatedBy(userId);
         existingstudentDetail.setUpdatedOn(date);
 
+        uploadStudentImage(existingstudentDetail, file);
         this.studentDetailRepository.save(existingstudentDetail);
         return existingstudentDetail;
     }
