@@ -49,7 +49,7 @@ public class StudentDetailServiceImpl implements StudentDetailService {
         return " New Student detail has been added";
     }
     private void  uploadStudentImage(StudentDetail studentDetail, MultipartFile file) throws Exception {
-        if (!file.isEmpty()){
+        if (file != null && !file.isEmpty()){
             String oldFilePath = "";
             FileDetail existFileDetail = null;
             if (studentDetail.getFileId() > 0) {
