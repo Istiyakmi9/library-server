@@ -127,19 +127,6 @@ public class StudentDetailServiceImpl implements StudentDetailService {
         return fileDetail;
     }
 
-    public ArrayList<StudentDetail> getAllStudentDetail() {
-        List<StudentDetail> result = this.studentDetailRepository.findAll();
-        List<FileDetail> fileDetails = fileDetailRepository.findAll();
-        result.forEach(x -> {
-            var file = fileDetails.stream().filter(i -> i.getFileId() == x.getFileId()).findFirst();
-            if (file.isPresent()) {
-                var fileDetail = file.get();
-                x.setFilePath(Paths.get(fileDetail.getFilePath(), fileDetail.getFileName() + "." + fileDetail.getFileExtension()).toString());
-            }
-        });
-        return (ArrayList<StudentDetail>) result;
-    }
-
     @Transactional(rollbackFor = Exception.class)
     public StudentDetail updateStudentDetailService(StudentDetail studentDetail, MultipartFile file, long userId) throws Exception {
         java.util.Date utilDate = new Date();
@@ -168,5 +155,17 @@ public class StudentDetailServiceImpl implements StudentDetailService {
         uploadStudentImage(existingstudentDetail, file);
         this.studentDetailRepository.save(existingstudentDetail);
         return existingstudentDetail;
+    }
+
+    public ArrayList<StudentDetail> getAllStudentDetail() {
+        List<StudentDetail> result = this.studentDetailRepository.findAll();
+        return (ArrayList<StudentDetail>) result;
+    }
+    public Optional<StudentDetail> getStudentDetailByUserIdService(long userId) {
+        Optional<StudentDetail> result = this.studentDetailRepository.findById(userId);
+        Optional<FileDetail> fileDetail = fileDetailRepository.findById(result.get().getFileId());
+        fileDetail.ifPresent(detail -> result.get().setFilePath(Paths.get(detail.getFilePath(), detail.getFileName() + "." + detail.getFileExtension()).toString()));
+
+        return result;
     }
 }

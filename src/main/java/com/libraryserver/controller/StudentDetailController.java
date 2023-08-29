@@ -44,4 +44,10 @@ public class StudentDetailController {
         ArrayList<StudentDetail> result = this.studentDetailServiceImpl.getAllStudentDetail();
         return ResponseEntity.ok(ApiResponse.Ok(result));
     }
+
+    @GetMapping("/getStudentDetailByUserId/{userId}")
+    public ResponseEntity getStudentDetailByUserId(@PathVariable("userId") long userId){
+        var result = this.studentDetailServiceImpl.getStudentDetailByUserIdService(userId);
+        return ResponseEntity.ok(ApiResponse.Ok(result));
+    }
 }
