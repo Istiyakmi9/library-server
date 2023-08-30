@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class StudentDetailServiceImpl implements StudentDetailService {
@@ -31,6 +33,7 @@ public class StudentDetailServiceImpl implements StudentDetailService {
     FileDetailRepository fileDetailRepository;
     @Autowired
     FileStorageProperties fileStorageProperties;
+    Logger logger = LoggerFactory.getLogger(StudentDetailServiceImpl.class);
 
     @Transactional(rollbackFor = Exception.class)
     public String addStudentDetailService(StudentDetail studentDetail, MultipartFile file) throws Exception {
@@ -158,7 +161,9 @@ public class StudentDetailServiceImpl implements StudentDetailService {
     }
 
     public ArrayList<StudentDetail> getAllStudentDetail() {
+        logger.info("getall studentdetail Method start here");
         List<StudentDetail> result = this.studentDetailRepository.findAll();
+        logger.info("Method end here");
         return (ArrayList<StudentDetail>) result;
     }
     public Optional<StudentDetail> getStudentDetailByUserIdService(long userId) {
