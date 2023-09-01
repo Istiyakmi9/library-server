@@ -1,7 +1,6 @@
 package com.libraryserver.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -14,7 +13,7 @@ public class StudentDetail {
     @Column(name= "UserId")
     Long userId;
 
-      @Column(name = "StudentName")
+    @Column(name = "StudentName")
     String studentName;
 
     @Column(name = "Mobile")
