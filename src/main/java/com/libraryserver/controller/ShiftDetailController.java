@@ -5,22 +5,40 @@ import com.libraryserver.model.ApiResponse;
 import com.libraryserver.serviceImpl.ShiftDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Optional;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api/shiftDetail")
 public class ShiftDetailController {
 
     @Autowired
     ShiftDetailServiceImpl shiftServiceImpl;
 
-    @PostMapping("/addShiftService")
+    @PostMapping("/addShiftDetail")
     public ResponseEntity<ApiResponse> addShiftDetail(@RequestBody ShiftDetail shiftDetail){
-    this.shiftServiceImpl.addShiftDetailService(shiftDetail);
-    return ResponseEntity.ok(ApiResponse.Ok(null));
+        var result = this.shiftServiceImpl.addShiftDetailService(shiftDetail);
+        return ResponseEntity.ok(ApiResponse.Ok(result));
+    }
+
+    @PutMapping("/updateShiftDetail/{shiftId}")
+    public ResponseEntity<ApiResponse> updateShiftDetail(@RequestBody ShiftDetail shiftDetail, @PathVariable("shiftId") long shiftId ) throws Exception {
+        ShiftDetail result = this.shiftServiceImpl.updateShiftDetailService(shiftDetail, shiftId);
+        return ResponseEntity.ok(ApiResponse.Ok(result));
+    }
+
+    @GetMapping("/getAllShiftDetail")
+    public ResponseEntity<ApiResponse> getAllShiftDetail(){
+        ArrayList<ShiftDetail> result = this.shiftServiceImpl.getAllShiftDetailService();
+        return ResponseEntity.ok(ApiResponse.Ok(result));
+    }
+
+    @GetMapping("/getShiftDetailByShiftId/{shiftId}")
+    public ResponseEntity<ApiResponse> getShiftDetailByShiftId( @PathVariable("shiftId") long shiftId ){
+        var result = this.shiftServiceImpl.getShiftDetailByShiftIdService(shiftId);
+        return ResponseEntity.ok(ApiResponse.Ok(result));
     }
 
 

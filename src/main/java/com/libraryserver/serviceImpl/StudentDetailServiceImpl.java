@@ -170,7 +170,6 @@ public class StudentDetailServiceImpl implements StudentDetailService {
         Optional<StudentDetail> result = this.studentDetailRepository.findById(userId);
         Optional<FileDetail> fileDetail = fileDetailRepository.findById(result.get().getFileId());
         fileDetail.ifPresent(detail -> result.get().setFilePath(Paths.get(detail.getFilePath(), detail.getFileName() + "." + detail.getFileExtension()).toString()));
-
         return result;
     }
 }

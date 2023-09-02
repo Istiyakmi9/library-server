@@ -23,6 +23,7 @@
 
         <mapping class="com.libraryserver.entity.Login"/>
         <mapping class="com.libraryserver.entity.StudentDetail"/>
+        <mapping class="com.libraryserver.entity.StudentDetail"/>
 
 
 
