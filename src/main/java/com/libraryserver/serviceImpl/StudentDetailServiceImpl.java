@@ -2,6 +2,7 @@ package com.libraryserver.serviceImpl;
 
 import com.libraryserver.entity.FileDetail;
 import com.libraryserver.entity.StudentDetail;
+import com.libraryserver.helper.HelperStudentDetailExcelUpload;
 import com.libraryserver.model.FileStorageProperties;
 import com.libraryserver.repository.FileDetailRepository;
 import com.libraryserver.repository.StudentDetailRepository;
@@ -33,6 +34,9 @@ public class StudentDetailServiceImpl implements StudentDetailService {
     FileDetailRepository fileDetailRepository;
     @Autowired
     FileStorageProperties fileStorageProperties;
+
+    @Autowired
+    HelperStudentDetailExcelUpload helperStudentDetailExcelUpload;
     Logger logger = LoggerFactory.getLogger(StudentDetailServiceImpl.class);
 
     @Transactional(rollbackFor = Exception.class)
@@ -170,7 +174,15 @@ public class StudentDetailServiceImpl implements StudentDetailService {
         Optional<StudentDetail> result = this.studentDetailRepository.findById(userId);
         Optional<FileDetail> fileDetail = fileDetailRepository.findById(result.get().getFileId());
         fileDetail.ifPresent(detail -> result.get().setFilePath(Paths.get(detail.getFilePath(), detail.getFileName() + "." + detail.getFileExtension()).toString()));
-
         return result;
+    }
+
+    public void saveStudentDetailExcelFile (MultipartFile file){
+        try {
+            List<StudentDetail> studentDetails = helperStudentDetailExcelUpload.convertStudentDetailExcelToList(file.getInputStream());
+            this.studentDetailRepository.saveAll(studentDetails);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 }

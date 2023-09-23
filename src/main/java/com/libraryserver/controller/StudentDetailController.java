@@ -2,6 +2,7 @@ package com.libraryserver.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.libraryserver.entity.StudentDetail;
+import com.libraryserver.helper.HelperCheckExcelFormat;
 import com.libraryserver.model.ApiResponse;
 import com.libraryserver.serviceImpl.StudentDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -21,6 +23,8 @@ public class StudentDetailController {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Autowired
+    HelperCheckExcelFormat helperCheckExcelFormat;
 
     @PostMapping("/addStudentDetail")
     public ResponseEntity<ApiResponse> addStudentDetail(@RequestParam("studentDetail") String student,
@@ -49,5 +53,14 @@ public class StudentDetailController {
     public ResponseEntity getStudentDetailByUserId(@PathVariable("userId") long userId){
         var result = this.studentDetailServiceImpl.getStudentDetailByUserIdService(userId);
         return ResponseEntity.ok(ApiResponse.Ok(result));
+    }
+
+    @PostMapping("/uploadStudentDetailExcelFile")
+    public ResponseEntity uploadStudentDetailExcelFile(@RequestParam("file")MultipartFile file){
+        if (this.helperCheckExcelFormat.checkExcelFormat(file)){
+            this.studentDetailServiceImpl.saveStudentDetailExcelFile(file);
+            return ResponseEntity.ok(ApiResponse.Ok( "File is uploaded and data is saved to db"));
+        }
+        return ResponseEntity.ok(ApiResponse.Ok("please upload excel file"));
     }
 }
