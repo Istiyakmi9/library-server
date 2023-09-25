@@ -55,6 +55,9 @@ public class StudentDetail {
     @Column(name = "CardDeposit")
     Boolean cardDeposit;
 
+    @Column(name = "UserRoleId")
+    int userRoleId;
+
     @Column(name = "Remarks")
     String remarks;
 
@@ -73,14 +76,6 @@ public class StudentDetail {
     @Column(name = "UpdatedOn")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     Date updatedOn;
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
 
     @Transient
     String filePath;
@@ -197,6 +192,14 @@ public class StudentDetail {
         this.cardDeposit = cardDeposit;
     }
 
+    public int getUserRoleId() {
+        return userRoleId;
+    }
+
+    public void setUserRoleId(int userRoleId) {
+        this.userRoleId = userRoleId;
+    }
+
     public String getRemarks() {
         return remarks;
     }
@@ -245,9 +248,15 @@ public class StudentDetail {
         this.updatedOn = updatedOn;
     }
 
-    public StudentDetail(Long userId, String studentName, String mobile, String email, int seatNo, BigDecimal amount, Date dateOfJoining, Date dateOfFeesPayment, Boolean lockerFesility, int lockerNo, BigDecimal lockerFees, Boolean refIdCardIssued, Date refIdCardIssueDate, Boolean cardDeposit, String remarks, long fileId, Long createdBy, Long updatedBy, Date createdOn, Date updatedOn) {
+    public String getFilePath() {
+        return filePath;
+    }
 
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
 
+    public StudentDetail(Long userId, String studentName, String mobile, String email, int seatNo, BigDecimal amount, Date dateOfJoining, Date dateOfFeesPayment, Boolean lockerFesility, int lockerNo, BigDecimal lockerFees, Boolean refIdCardIssued, Date refIdCardIssueDate, Boolean cardDeposit, int userRoleId, String remarks, long fileId, Long createdBy, Long updatedBy, Date createdOn, Date updatedOn, String filePath) {
         this.userId = userId;
         this.studentName = studentName;
         this.mobile = mobile;
@@ -262,12 +271,14 @@ public class StudentDetail {
         this.refIdCardIssued = refIdCardIssued;
         this.refIdCardIssueDate = refIdCardIssueDate;
         this.cardDeposit = cardDeposit;
+        this.userRoleId = userRoleId;
         this.remarks = remarks;
         this.fileId = fileId;
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
         this.createdOn = createdOn;
         this.updatedOn = updatedOn;
+        this.filePath = filePath;
     }
 
     public StudentDetail() {
@@ -290,12 +301,14 @@ public class StudentDetail {
                 ", refIdCardIssued=" + refIdCardIssued +
                 ", refIdCardIssueDate=" + refIdCardIssueDate +
                 ", cardDeposit=" + cardDeposit +
+                ", userRoleId=" + userRoleId +
                 ", remarks='" + remarks + '\'' +
                 ", fileId=" + fileId +
                 ", createdBy=" + createdBy +
                 ", updatedBy=" + updatedBy +
                 ", createdOn=" + createdOn +
                 ", updatedOn=" + updatedOn +
+                ", filePath='" + filePath + '\'' +
                 '}';
     }
 }

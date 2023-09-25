@@ -1,10 +1,12 @@
 package com.libraryserver.serviceImpl;
 
 import com.libraryserver.entity.FileDetail;
+import com.libraryserver.entity.Login;
 import com.libraryserver.entity.StudentDetail;
 import com.libraryserver.helper.HelperStudentDetailExcelUpload;
 import com.libraryserver.model.FileStorageProperties;
 import com.libraryserver.repository.FileDetailRepository;
+import com.libraryserver.repository.LoginRepository;
 import com.libraryserver.repository.StudentDetailRepository;
 import com.libraryserver.service.StudentDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,19 +39,45 @@ public class StudentDetailServiceImpl implements StudentDetailService {
 
     @Autowired
     HelperStudentDetailExcelUpload helperStudentDetailExcelUpload;
+    @Autowired
+    LoginRepository loginRepository;
+
     Logger logger = LoggerFactory.getLogger(StudentDetailServiceImpl.class);
+
 
     @Transactional(rollbackFor = Exception.class)
     public String addStudentDetailService(StudentDetail studentDetail, MultipartFile file) throws Exception {
         Date utilDate = new Date();
         var date = new Timestamp(utilDate.getTime());
+
+        Login loginDetail;
+        loginDetail = new Login();
+        Optional<Login> existingUser = Optional.ofNullable(this.loginRepository.getLoginLastRecord());
+        if (existingUser.isEmpty()){
+            loginDetail.setLoginId(1L);
+        }else {
+            loginDetail.setLoginId(existingUser.get().getLoginId()+1);
+        }
+
         Optional<StudentDetail> lastUserId = Optional.ofNullable(this.studentDetailRepository.getLastUserId());
         if (lastUserId.isEmpty())
             studentDetail.setUserId(1L);
         else
             studentDetail.setUserId(lastUserId.get().getUserId()+1);
 
+        loginDetail.setUserId(studentDetail.getUserId());
+        loginDetail.setEmail(studentDetail.getEmail());
+        loginDetail.setPassword("user123");
+        loginDetail.setMobile(studentDetail.getMobile());
+        loginDetail.setUserRoleId(studentDetail.getUserRoleId());
+        loginDetail.setCreatedOn(date);
+        loginDetail.setCreatedBy(studentDetail.getUserId());
+        loginDetail.setUpdatedBy(studentDetail.getUserId());
+        loginDetail.setUpdatedOn(date);
+        this.loginRepository.save(loginDetail);
+
         studentDetail.setCreatedOn(date);
+        studentDetail.setCreatedBy(studentDetail.getUserId());
         studentDetail.setFileId(0L);
         uploadStudentImage(studentDetail, file);
         this.studentDetailRepository.save(studentDetail);
@@ -156,6 +184,7 @@ public class StudentDetailServiceImpl implements StudentDetailService {
         existingstudentDetail.setRefIdCardIssueDate(studentDetail.getRefIdCardIssueDate());
         existingstudentDetail.setCardDeposit(studentDetail.getCardDeposit());
         existingstudentDetail.setRemarks(studentDetail.getRemarks());
+        existingstudentDetail.setUserRoleId(studentDetail.getUserRoleId());
         existingstudentDetail.setUpdatedBy(userId);
         existingstudentDetail.setUpdatedOn(date);
 

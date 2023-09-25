@@ -10,7 +10,6 @@ import java.util.Date;
 public class Login {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "LoginId")
     Long loginId;
 
@@ -25,6 +24,9 @@ public class Login {
 
     @Column(name = "Mobile")
     String mobile;
+
+    @Column(name = "UserRoleId")
+    int userRoleId;
 
     @Column(name = "CreatedBy")
     Long createdBy;
@@ -80,6 +82,14 @@ public class Login {
         this.mobile = mobile;
     }
 
+    public int getUserRoleId() {
+        return userRoleId;
+    }
+
+    public void setUserRoleId(int userRoleId) {
+        this.userRoleId = userRoleId;
+    }
+
     public Long getCreatedBy() {
         return createdBy;
     }
@@ -112,12 +122,13 @@ public class Login {
         this.updatedOn = updatedOn;
     }
 
-    public Login(Long loginId, Long userId, String email, String password, String mobile, Long createdBy, Long updatedBy, Date createdOn, Date updatedOn) {
+    public Login(Long loginId, Long userId, String email, String password, String mobile, int userRoleId, Long createdBy, Long updatedBy, Date createdOn, Date updatedOn) {
         this.loginId = loginId;
         this.userId = userId;
         this.email = email;
         this.password = password;
         this.mobile = mobile;
+        this.userRoleId = userRoleId;
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
         this.createdOn = createdOn;
@@ -135,6 +146,7 @@ public class Login {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", mobile='" + mobile + '\'' +
+                ", userRoleId=" + userRoleId +
                 ", createdBy=" + createdBy +
                 ", updatedBy=" + updatedBy +
                 ", createdOn=" + createdOn +
