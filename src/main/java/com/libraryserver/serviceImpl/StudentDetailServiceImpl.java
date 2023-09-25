@@ -52,19 +52,24 @@ public class StudentDetailServiceImpl implements StudentDetailService {
 
         Login loginDetail;
         loginDetail = new Login();
-        Optional<Login> existingUser = Optional.ofNullable(this.loginRepository.getLoginLastRecord());
-        if (existingUser.isEmpty()){
+        var existingUser = this.loginRepository.getLoginLastRecord();
+        if (existingUser == null){
             loginDetail.setLoginId(1L);
         }else {
-            loginDetail.setLoginId(existingUser.get().getLoginId()+1);
+            loginDetail.setLoginId(existingUser.getLoginId()+1);
         }
 
-        Optional<StudentDetail> lastUserId = Optional.ofNullable(this.studentDetailRepository.getLastUserId());
-        if (lastUserId.isEmpty())
+        var lastUserId = this.studentDetailRepository.getLastUserId();
+        if (lastUserId == null)
             studentDetail.setUserId(1L);
         else
-            studentDetail.setUserId(lastUserId.get().getUserId()+1);
+            studentDetail.setUserId(lastUserId.getUserId()+1);
 
+        studentDetail.setCreatedOn(date);
+        studentDetail.setCreatedBy(studentDetail.getUserId());
+        studentDetail.setFileId(0L);
+        uploadStudentImage(studentDetail, file);
+        this.studentDetailRepository.save(studentDetail);
         loginDetail.setUserId(studentDetail.getUserId());
         loginDetail.setEmail(studentDetail.getEmail());
         loginDetail.setPassword("user123");
@@ -75,12 +80,6 @@ public class StudentDetailServiceImpl implements StudentDetailService {
         loginDetail.setUpdatedBy(studentDetail.getUserId());
         loginDetail.setUpdatedOn(date);
         this.loginRepository.save(loginDetail);
-
-        studentDetail.setCreatedOn(date);
-        studentDetail.setCreatedBy(studentDetail.getUserId());
-        studentDetail.setFileId(0L);
-        uploadStudentImage(studentDetail, file);
-        this.studentDetailRepository.save(studentDetail);
         return " New Student detail has been added";
     }
     private void  uploadStudentImage(StudentDetail studentDetail, MultipartFile file) throws Exception {

@@ -1,10 +1,12 @@
 package com.libraryserver.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
 
+@Data
 @Entity
 @Table(name="login")
 public class Login {
@@ -42,115 +44,5 @@ public class Login {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     Date updatedOn;
 
-    public Long getLoginId() {
-        return loginId;
-    }
 
-    public void setLoginId(Long loginId) {
-        this.loginId = loginId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public int getUserRoleId() {
-        return userRoleId;
-    }
-
-    public void setUserRoleId(int userRoleId) {
-        this.userRoleId = userRoleId;
-    }
-
-    public Long getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(Long createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Long getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(Long updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
-    public Date getCreatedOn() {
-        return createdOn;
-    }
-
-    public void setCreatedOn(Date createdOn) {
-        this.createdOn = createdOn;
-    }
-
-    public Date getUpdatedOn() {
-        return updatedOn;
-    }
-
-    public void setUpdatedOn(Date updatedOn) {
-        this.updatedOn = updatedOn;
-    }
-
-    public Login(Long loginId, Long userId, String email, String password, String mobile, int userRoleId, Long createdBy, Long updatedBy, Date createdOn, Date updatedOn) {
-        this.loginId = loginId;
-        this.userId = userId;
-        this.email = email;
-        this.password = password;
-        this.mobile = mobile;
-        this.userRoleId = userRoleId;
-        this.createdBy = createdBy;
-        this.updatedBy = updatedBy;
-        this.createdOn = createdOn;
-        this.updatedOn = updatedOn;
-    }
-
-    public Login() {
-    }
-
-    @Override
-    public String toString() {
-        return "Login{" +
-                "loginId=" + loginId +
-                ", userId=" + userId +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", mobile='" + mobile + '\'' +
-                ", userRoleId=" + userRoleId +
-                ", createdBy=" + createdBy +
-                ", updatedBy=" + updatedBy +
-                ", createdOn=" + createdOn +
-                ", updatedOn=" + updatedOn +
-                '}';
-    }
 }
