@@ -20,13 +20,13 @@ public class HelperStudentDetailExcelUpload {
     @Autowired
     StudentDetailRepository studentDetailRepository;
 
-    private long getLastUserId(){
+    private long getLastStudentId(){
          long lastId = 0;
-        Optional<StudentDetail> lastUserId = Optional.ofNullable(studentDetailRepository.getLastUserId());
-        if (lastUserId.isEmpty())
+        Optional<StudentDetail> lastStudentId = Optional.ofNullable(studentDetailRepository.getLastStudentId());
+        if (lastStudentId.isEmpty())
             lastId = 1;
         else
-            lastId = lastUserId.get().getUserId()+1;
+            lastId = lastStudentId.get().getStudentId()+1;
         return lastId;
     }
     // convert excel to list of products
@@ -38,7 +38,7 @@ public class HelperStudentDetailExcelUpload {
 
             int rowNumber = 0;
             Iterator<Row> iterator = sheet.iterator();
-            long lastId = getLastUserId();
+            long lastId = getLastStudentId();
             java.util.Date utilDate = new Date();
             var date = new Timestamp(utilDate.getTime());
             while (iterator.hasNext()) {
@@ -54,7 +54,7 @@ public class HelperStudentDetailExcelUpload {
 
                 while (cells.hasNext()) {
                     Cell cell = cells.next();
-                    studentDetail.setUserId(lastId);
+                    studentDetail.setStudentId(lastId);
                     switch (cid) {
                         case 0:
                             studentDetail.setStudentName(cell.getStringCellValue());

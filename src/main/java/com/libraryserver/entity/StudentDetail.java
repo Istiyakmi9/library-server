@@ -13,8 +13,8 @@ import java.util.Date;
 public class StudentDetail {
 
     @Id
-    @Column(name= "UserId")
-    Long userId;
+    @Column(name= "StudentId")
+    Long studentId;
 
     @Column(name = "StudentName")
     String studentName;

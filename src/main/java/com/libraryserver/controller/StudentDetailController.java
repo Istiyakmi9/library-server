@@ -34,12 +34,12 @@ public class StudentDetailController {
         return ResponseEntity.ok(ApiResponse.Ok(result));
     }
 
-    @PutMapping("/updateStudentDetail/{userId}")
+    @PutMapping("/updateStudentDetail/{studentId}")
     public ResponseEntity<ApiResponse> updateStudentDetail(@RequestParam ("studentDetail") String student,
                                                            @RequestParam(value = "profile", required = false) MultipartFile file,
-                                                           @PathVariable("userId") long userId ) throws Exception {
+                                                           @PathVariable("studentId") long studentId ) throws Exception {
         StudentDetail studentDetail = objectMapper.readValue(student, StudentDetail.class);
-        var result = this.studentDetailServiceImpl.updateStudentDetailService(studentDetail, file, userId);
+        var result = this.studentDetailServiceImpl.updateStudentDetailService(studentDetail, file, studentId);
         return ResponseEntity.ok(ApiResponse.Ok(result));
     }
 
@@ -49,9 +49,9 @@ public class StudentDetailController {
         return ResponseEntity.ok(ApiResponse.Ok(result));
     }
 
-    @GetMapping("/getStudentDetailByUserId/{userId}")
-    public ResponseEntity getStudentDetailByUserId(@PathVariable("userId") long userId){
-        var result = this.studentDetailServiceImpl.getStudentDetailByUserIdService(userId);
+    @GetMapping("/getStudentDetailByStudentId/{studentId}")
+    public ResponseEntity getStudentDetailByStudentId(@PathVariable("studentId") long studentId){
+        var result = this.studentDetailServiceImpl.getStudentDetailByStudentIdService(studentId);
         return ResponseEntity.ok(ApiResponse.Ok(result));
     }
 

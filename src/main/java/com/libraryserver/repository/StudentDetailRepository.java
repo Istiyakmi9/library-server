@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @EnableAutoConfiguration
 public interface StudentDetailRepository extends JpaRepository<StudentDetail, Long> {
 
-    @Query(nativeQuery = true, value = "select u.* from studentdetail u order by u.UserId desc limit 1")
-    StudentDetail getLastUserId();
+    @Query(nativeQuery = true, value = "select u.* from studentdetail u order by u.StudentId desc limit 1")
+    StudentDetail getLastStudentId();
 
 }

@@ -59,25 +59,27 @@ public class StudentDetailServiceImpl implements StudentDetailService {
             loginDetail.setLoginId(existingUser.getLoginId()+1);
         }
 
-        var lastUserId = this.studentDetailRepository.getLastUserId();
-        if (lastUserId == null)
-            studentDetail.setUserId(1L);
+        var lastStudentId = this.studentDetailRepository.getLastStudentId();
+        if (lastStudentId == null)
+//            studentDetail.setUserId(1L);
+            studentDetail.setStudentId(1L);
         else
-            studentDetail.setUserId(lastUserId.getUserId()+1);
+//            studentDetail.setUserId(lastUserId.getUserId()+1);
+            studentDetail.setStudentId(lastStudentId.getStudentId()+1);
 
         studentDetail.setCreatedOn(date);
-        studentDetail.setCreatedBy(studentDetail.getUserId());
+        studentDetail.setCreatedBy(studentDetail.getStudentId());
         studentDetail.setFileId(0L);
         uploadStudentImage(studentDetail, file);
         this.studentDetailRepository.save(studentDetail);
-        loginDetail.setUserId(studentDetail.getUserId());
+        loginDetail.setUserId(studentDetail.getStudentId());
         loginDetail.setEmail(studentDetail.getEmail());
         loginDetail.setPassword("user123");
         loginDetail.setMobile(studentDetail.getMobile());
         loginDetail.setUserRoleId(studentDetail.getUserRoleId());
         loginDetail.setCreatedOn(date);
-        loginDetail.setCreatedBy(studentDetail.getUserId());
-        loginDetail.setUpdatedBy(studentDetail.getUserId());
+        loginDetail.setCreatedBy(studentDetail.getStudentId());
+        loginDetail.setUpdatedBy(studentDetail.getStudentId());
         loginDetail.setUpdatedOn(date);
         this.loginRepository.save(loginDetail);
         return " New Student detail has been added";
@@ -92,7 +94,7 @@ public class StudentDetailServiceImpl implements StudentDetailService {
                     oldFilePath = existFileDetail.getFileName()+"."+existFileDetail.getFileExtension();
             }
 
-            FileDetail fileDetail = uploadFile(file, studentDetail.getUserId(), "student_" + studentDetail.getUserId(), oldFilePath);
+            FileDetail fileDetail = uploadFile(file, studentDetail.getStudentId(), "student_" + studentDetail.getStudentId(), oldFilePath);
             if (fileDetail != null){
                 if (existFileDetail == null){
                     FileDetail lastFileDetail = fileDetailRepository.getLastFileDetail();
@@ -102,7 +104,7 @@ public class StudentDetailServiceImpl implements StudentDetailService {
                         fileDetail.setFileId(lastFileDetail.getFileId() + 1);
 
                     studentDetail.setFileId(fileDetail.getFileId());
-                    fileDetail.setFileOwnerId(studentDetail.getUserId());
+                    fileDetail.setFileOwnerId(studentDetail.getStudentId());
                     existFileDetail = fileDetail;
                 }else {
                     existFileDetail.setFileName(fileDetail.getFileName());
@@ -110,14 +112,14 @@ public class StudentDetailServiceImpl implements StudentDetailService {
                     existFileDetail.setFileExtension(fileDetail.getFileExtension());
                 }
 
-                existFileDetail.setCreatedBy(studentDetail.getUserId());
+                existFileDetail.setCreatedBy(studentDetail.getStudentId());
                 existFileDetail.setCreatedOn(studentDetail.getCreatedOn());
                 fileDetailRepository.save(existFileDetail);
             }
         }
     }
 
-    private FileDetail uploadFile(MultipartFile file, long userId, String fileName, String existingFilePath) throws Exception {
+    private FileDetail uploadFile(MultipartFile file, long studentId, String fileName, String existingFilePath) throws Exception {
         FileDetail fileDetail = null;
         String name = file.getOriginalFilename();
         if (file != null && name != null && !name.isEmpty()){
@@ -162,10 +164,10 @@ public class StudentDetailServiceImpl implements StudentDetailService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public StudentDetail updateStudentDetailService(StudentDetail studentDetail, MultipartFile file, long userId) throws Exception {
+    public StudentDetail updateStudentDetailService(StudentDetail studentDetail, MultipartFile file, long studentId) throws Exception {
         java.util.Date utilDate = new Date();
         var date = new Timestamp(utilDate.getTime());
-        Optional<StudentDetail> result = this.studentDetailRepository.findById(userId);
+        Optional<StudentDetail> result = this.studentDetailRepository.findById(studentId);
         if (result.isEmpty())
             throw new Exception();
         StudentDetail existingstudentDetail = result.get();
@@ -184,7 +186,7 @@ public class StudentDetailServiceImpl implements StudentDetailService {
         existingstudentDetail.setCardDeposit(studentDetail.getCardDeposit());
         existingstudentDetail.setRemarks(studentDetail.getRemarks());
         existingstudentDetail.setUserRoleId(studentDetail.getUserRoleId());
-        existingstudentDetail.setUpdatedBy(userId);
+        existingstudentDetail.setUpdatedBy(studentId);
         existingstudentDetail.setUpdatedOn(date);
 
         uploadStudentImage(existingstudentDetail, file);
@@ -198,8 +200,8 @@ public class StudentDetailServiceImpl implements StudentDetailService {
         logger.info("Method end here");
         return (ArrayList<StudentDetail>) result;
     }
-    public Optional<StudentDetail> getStudentDetailByUserIdService(long userId) {
-        Optional<StudentDetail> result = this.studentDetailRepository.findById(userId);
+    public Optional<StudentDetail> getStudentDetailByStudentIdService(long studentId) {
+        Optional<StudentDetail> result = this.studentDetailRepository.findById(studentId);
         Optional<FileDetail> fileDetail = fileDetailRepository.findById(result.get().getFileId());
         fileDetail.ifPresent(detail -> result.get().setFilePath(Paths.get(detail.getFilePath(), detail.getFileName() + "." + detail.getFileExtension()).toString()));
         return result;
