@@ -18,7 +18,7 @@ public class SubscriptionPlanController {
     SubscriptionPlanServiceImpl subscriptionPlanServiceImpl;
 
     @PostMapping("/addSubscriptionPlan")
-    public ResponseEntity<ApiResponse> addSubscriptionPlan(@RequestBody SubscriptionPlan subscriptionPlan){
+    public ResponseEntity<ApiResponse> addSubscriptionPlan(@RequestBody SubscriptionPlan subscriptionPlan) throws Exception {
         var result = this.subscriptionPlanServiceImpl.addSubscriptionPlanService(subscriptionPlan);
         return ResponseEntity.ok(ApiResponse.Ok(result));
     }

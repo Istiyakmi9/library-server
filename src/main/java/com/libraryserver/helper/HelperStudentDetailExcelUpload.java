@@ -94,7 +94,6 @@ public class HelperStudentDetailExcelUpload {
                             boolean isRefCardIssue = false;
                             if (cell.getStringCellValue().equalsIgnoreCase("yes"))
                                 isRefCardIssue = true;
-
                             studentDetail.setRefIdCardIssued(isRefCardIssue);
                             break;
                         case 11:
@@ -104,7 +103,6 @@ public class HelperStudentDetailExcelUpload {
                             boolean isCardDeposit = false;
                             if (cell.getStringCellValue().equalsIgnoreCase("yes"))
                                 isCardDeposit = true;
-
                             studentDetail.setCardDeposit(isCardDeposit);
                             break;
                         case 13:

@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface SubscriptionPlanService {
 
-    public String addSubscriptionPlanService(SubscriptionPlan subscriptionPlan);
+    public String addSubscriptionPlanService(SubscriptionPlan subscriptionPlan) throws Exception;
     public SubscriptionPlan updateSubscriptionPlanService(SubscriptionPlan subscriptionPlan, int subscriptionPlanId) throws Exception;
     public ArrayList<SubscriptionPlan> getAllSubscriptionPlanService();
     public Optional<SubscriptionPlan> getSubscriptionPlanBySubscriptionIdService(int subscriptionId);

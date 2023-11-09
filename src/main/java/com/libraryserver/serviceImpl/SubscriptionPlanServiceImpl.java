@@ -6,6 +6,7 @@ import com.libraryserver.service.SubscriptionPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,7 +19,8 @@ public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
     @Autowired
     SubscriptionPlanRepository subscriptionPlanRepository;
 
-    public String addSubscriptionPlanService(SubscriptionPlan subscriptionPlan) {
+
+    public String addSubscriptionPlanService(SubscriptionPlan subscriptionPlan) throws Exception {
         java.util.Date utilDate = new Date();
         var date = new Timestamp(utilDate.getTime());
         var lastSubscriptionId = this.subscriptionPlanRepository.getLastSubscriptionId();
@@ -27,11 +29,27 @@ public class SubscriptionPlanServiceImpl implements SubscriptionPlanService {
         }else {
             subscriptionPlan.setSubscriptionId(lastSubscriptionId.getSubscriptionId()+1);
         }
-            subscriptionPlan.setCreatedOn(date);
-            subscriptionPlan.setLibraryId(1);
+        subscriptionPlan.setCreatedOn(date);
+        subscriptionPlan.setLibraryId(1);
+//         validateSubscriptionAmount(subscriptionPlan);
         this.subscriptionPlanRepository.save(subscriptionPlan);
 
         return "New Subscription Plan has been added";
+    }
+
+    private void validateSubscriptionAmount(SubscriptionPlan subscriptionPlan) throws Exception {
+        BigDecimal amount;
+        if (subscriptionPlan.isMonthlySubscription()) {
+            var month = subscriptionPlan.getNumberOfMonths();
+            var monthlyAmount = subscriptionPlan.getMonthlyAmount();
+            amount = monthlyAmount.multiply(BigDecimal.valueOf(month));
+        } else {
+            var hours = subscriptionPlan.getNumberOfHours();
+            var hourlylyAmount = subscriptionPlan.getHourlyAmount();
+            amount = hourlylyAmount.multiply(BigDecimal.valueOf(hours));
+        }
+        if (!amount.equals(subscriptionPlan.getFinalAmountPerMonth()))
+            throw new Exception("Final amount not match");
     }
 
 
