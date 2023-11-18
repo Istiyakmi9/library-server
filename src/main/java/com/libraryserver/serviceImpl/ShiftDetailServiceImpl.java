@@ -20,11 +20,11 @@ public class ShiftDetailServiceImpl implements ShiftDetailService {
     public String addShiftDetailService(ShiftDetail shift) {
         java.util.Date utilDate = new Date();
         var date = new Timestamp(utilDate.getTime());
-        Optional<ShiftDetail> lastShiftId = Optional.ofNullable(this.shiftRepository.getLastShiftId());
-        if (lastShiftId.isEmpty()){
+        var lastShiftId = this.shiftRepository.getLastShiftId();
+        if (lastShiftId == null){
             shift.setShiftId(1L);
         }else {
-            shift.setShiftId(lastShiftId.get().getShiftId()+1);
+            shift.setShiftId(lastShiftId.getShiftId()+1);
         }
         shift.setCreatedOn(date);
         this.shiftRepository.save(shift);

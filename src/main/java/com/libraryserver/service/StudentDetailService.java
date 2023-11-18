@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface StudentDetailService {
 
     public String addStudentDetailService(StudentDetail studentDetail, MultipartFile file) throws Exception;
+    public StudentDetail updateStudentDetailService(StudentDetail studentDetail, MultipartFile file, long studentId) throws Exception;
     public ArrayList<StudentDetail> getAllStudentDetail();
-    public Optional<StudentDetail> getStudentDetailByUserIdService(long userId);
+    public Optional<StudentDetail> getStudentDetailByStudentIdService(long studentId);
 }
